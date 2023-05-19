@@ -1,6 +1,6 @@
-package ooop.analysis.results;
+package ooop.analysis.result;
 
-public final class ExceptionAnalysisResult extends AnalysisResult {
+public final class ExceptionAnalysisResult implements AnalysisResult {
     private final Exception e;
 
     public ExceptionAnalysisResult(Exception e) {

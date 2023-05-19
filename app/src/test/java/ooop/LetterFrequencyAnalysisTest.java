@@ -1,8 +1,8 @@
 package ooop;
 
-import ooop.analysis.LetterFrequencyAnalysis;
-import ooop.analysis.results.AnalysisResult;
-import ooop.analysis.results.DistributionAnalysisResult;
+import ooop.analysis.sequential.SequentialLetterFrequencyAnalysis;
+import ooop.analysis.result.AnalysisResult;
+import ooop.analysis.result.DistributionAnalysisResult;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -16,11 +16,11 @@ import java.util.Set;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class LetterFrequencyAnalysisTest {
-    private ClassLoader classLoader = getClass().getClassLoader();
-    private LetterFrequencyAnalysis letterFrequencyAnalysis;
+    private final ClassLoader classLoader = getClass().getClassLoader();
+    private SequentialLetterFrequencyAnalysis letterFrequencyAnalysis;
 
     private static int[] distributionOfTestFile() {
-        int[] distribution = new int[LetterFrequencyAnalysis.ALPHABET_LENGTH];
+        int[] distribution = new int[SequentialLetterFrequencyAnalysis.ALPHABET_LENGTH];
         Arrays.fill(distribution, 1);
         for (char c : Set.of('R', 'U', 'H', 'T')) {
             distribution[c - 'A'] = 2;
@@ -31,7 +31,7 @@ class LetterFrequencyAnalysisTest {
     }
 
     @BeforeEach void beforeEach() throws URISyntaxException {
-        letterFrequencyAnalysis = new LetterFrequencyAnalysis();
+        letterFrequencyAnalysis = new SequentialLetterFrequencyAnalysis();
     }
     @Test void testEmptyDirectoryLetterFrequencyAnalysisYieldsNoResults() {
         Map<Path, AnalysisResult> expectedResultMap = Collections.emptyMap();
@@ -45,7 +45,7 @@ class LetterFrequencyAnalysisTest {
     @Test void testEmptyFileLetterFrequencyAnalysisYieldsEmptyDistributionResult() {
         String emptyFilePath = classLoader.getResource("data/empty.txt").getPath();
         Map<Path, AnalysisResult> expectedResultMap = Map.of(
-                Path.of(emptyFilePath), new DistributionAnalysisResult(new int[LetterFrequencyAnalysis.ALPHABET_LENGTH])
+                Path.of(emptyFilePath), new DistributionAnalysisResult(new int[SequentialLetterFrequencyAnalysis.ALPHABET_LENGTH])
         );
 
         letterFrequencyAnalysis.launch(emptyFilePath);
@@ -68,7 +68,7 @@ class LetterFrequencyAnalysisTest {
         String emptyFilePath = classLoader.getResource("data/empty.txt").getPath();
         String testFilePath = classLoader.getResource("data/test.txt").getPath();
         Map<Path, AnalysisResult> expectedResultMap = Map.of(
-                Path.of(emptyFilePath), new DistributionAnalysisResult(new int[LetterFrequencyAnalysis.ALPHABET_LENGTH]),
+                Path.of(emptyFilePath), new DistributionAnalysisResult(new int[SequentialLetterFrequencyAnalysis.ALPHABET_LENGTH]),
                 Path.of(testFilePath), new DistributionAnalysisResult(distributionOfTestFile()));
 
         letterFrequencyAnalysis.launch(classLoader.getResource("data").getPath());

@@ -1,8 +1,8 @@
-package ooop.analysis.results;
+package ooop.analysis.result;
 
 import java.util.Arrays;
 
-public final class DistributionAnalysisResult extends AnalysisResult {
+public final class DistributionAnalysisResult implements AnalysisResult {
     private final int[] distribution;
 
     public DistributionAnalysisResult(int[] distribution) {
