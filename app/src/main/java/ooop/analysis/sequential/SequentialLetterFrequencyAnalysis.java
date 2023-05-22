@@ -30,30 +30,4 @@ public class SequentialLetterFrequencyAnalysis implements LetterFrequencyAnalysi
         resultByFile.forEach((p, r) -> System.out.println(p.toString() + ":\t" + r.toString()));
     }
 
-    public static AnalysisResult ofFile(Path file) {
-        try (BufferedReader bufferedReader = Files.newBufferedReader(file)) {
-            int[] distribution = new int[ALPHABET_LENGTH];
-            int charValue;
-            while ((charValue = bufferedReader.read()) != -1) {
-                if (isLetter(charValue)) {
-                    distribution[(charValue & ALPHABET_POSITION_MASK) - 1]++;
-                }
-            }
-            return new DistributionAnalysisResult(distribution);
-        } catch (IOException e) {
-            return new ExceptionAnalysisResult(e);
-        }
-    }
-
-    private static boolean isLetter(int charValue) {
-        return isLowercaseLetter(charValue) || isUppercaseLetter(charValue);
-    }
-
-    private static boolean isLowercaseLetter(int charValue) {
-        return charValue >= 'a' && charValue <= 'z';
-    }
-    private static boolean isUppercaseLetter(int charValue) {
-        return charValue >= 'A' && charValue <= 'Z';
-    }
-
 }

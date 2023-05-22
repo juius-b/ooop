@@ -11,8 +11,8 @@ import java.nio.file.Path;
 
 import static ooop.analysis.util.Latin.*;
 
-public class AnalysisComputation {
-    public static AnalysisResult compute(Path file) {
+public class Analysis {
+    public static AnalysisResult computeLetterFrequency(Path file) {
         try (BufferedReader bufferedReader = Files.newBufferedReader(file)) {
             int[] distribution = new int[ALPHABET_LENGTH];
             int codePoint;

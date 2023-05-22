@@ -1,6 +1,7 @@
 package ooop.analysis.sequential;
 
 import ooop.analysis.result.ExceptionAnalysisResult;
+import ooop.analysis.util.Analysis;
 
 import java.io.IOException;
 import java.nio.file.*;
@@ -10,7 +11,7 @@ public class PathAction {
 
     public static void launch(SequentialLetterFrequencyAnalysis letterFrequencyAnalysis, Path path) {
         if (Files.isRegularFile(path)) {
-            letterFrequencyAnalysis.getResultByFile().computeIfAbsent(path, SequentialLetterFrequencyAnalysis::ofFile);
+            letterFrequencyAnalysis.getResultByFile().computeIfAbsent(path, Analysis::computeLetterFrequency);
         } else if (Files.isDirectory(path)) {
             try (Stream<Path> entries = Files.list(path)) {
                 // Recursive call
