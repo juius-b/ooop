@@ -1,13 +1,11 @@
 package ooop.analysis.concurrent;
 
-import ooop.analysis.result.AnalysisResult;
 import ooop.analysis.result.ExceptionAnalysisResult;
+import ooop.analysis.util.Analysis;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Set;
-import java.util.concurrent.Future;
 import java.util.concurrent.RecursiveAction;
 import java.util.stream.Stream;
 
@@ -21,14 +19,15 @@ public class RecursivePathAction extends RecursiveAction {
     }
 
     @Override
-    protected void compute() {
+    public void compute() {
+        if (!container.getSeenPaths().add(path)) {
+            return;
+        }
         if (Files.isRegularFile(path)) {
-            if (!container.getSeenFiles().add(path)) {
-                container.getFutureResults().add(new FileTask(path));
-            }
+            container.getResultByFile().putIfAbsent(path, Analysis.computeLetterFrequency(path));
         } else if (Files.isDirectory(path)) {
             try (Stream<Path> entries = Files.list(path)) {
-                entries.forEach(entry -> new RecursivePathAction(path, container));
+                entries.forEach(entry -> container.getForkJoinTasks().add(new RecursivePathAction(entry, container).fork()));
             } catch (IOException e) {
                 container.getResultByFile().putIfAbsent(path, new ExceptionAnalysisResult(e));
             }

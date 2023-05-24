@@ -6,19 +6,19 @@ import java.nio.file.Path;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.Future;
+import java.util.concurrent.ForkJoinTask;
 
 public class ConcurrentAnalysisContainer {
-    private final Set<Future<AnalysisResult>> futureResults = ConcurrentHashMap.newKeySet();
-    private final Set<Path> seenFiles = ConcurrentHashMap.newKeySet();
+    private final Set<ForkJoinTask<?>> forkJoinTasks = ConcurrentHashMap.newKeySet();
+    private final Set<Path> seenPaths = ConcurrentHashMap.newKeySet();
     private final Map<Path, AnalysisResult> resultByFile = new ConcurrentHashMap<>();
 
-    public Set<Future<AnalysisResult>> getFutureResults() {
-        return futureResults;
+    public Set<ForkJoinTask<?>> getForkJoinTasks() {
+        return forkJoinTasks;
     }
 
-    public Set<Path> getSeenFiles() {
-        return seenFiles;
+    public Set<Path> getSeenPaths() {
+        return seenPaths;
     }
 
     public Map<Path, AnalysisResult> getResultByFile() {

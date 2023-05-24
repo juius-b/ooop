@@ -6,6 +6,7 @@ import ooop.analysis.result.AnalysisResult;
 import java.nio.file.Path;
 import java.util.Map;
 import java.util.concurrent.ForkJoinPool;
+import java.util.concurrent.ForkJoinTask;
 
 public class ConcurrentLetterFrequencyAnalysis implements LetterFrequencyAnalysis {
 
@@ -13,10 +14,14 @@ public class ConcurrentLetterFrequencyAnalysis implements LetterFrequencyAnalysi
 
     @Override
     public void launch(String... args) {
-        ForkJoinPool forkJoinPool = new ForkJoinPool();
+        ForkJoinPool forkJoinPool = ForkJoinPool.commonPool();
         for (String arg : args) {
             Path path = Path.of(arg);
-            forkJoinPool.submit(new RecursivePathAction(path, container));
+            container.getForkJoinTasks().add(forkJoinPool.submit(new RecursivePathAction(path, container)));
+        }
+
+        for (ForkJoinTask<?> forkJoinTask : container.getForkJoinTasks()) {
+            forkJoinTask.join();
         }
 
         container.getResultByFile().forEach((p, r) -> System.out.println(p.toString() + ":\t" + r.toString()));
